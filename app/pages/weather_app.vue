@@ -46,13 +46,13 @@
 
         <!-- Stats -->
         <v-row class="mb-2">
-          <v-col v-for="s in stats" :key="s.label" cols="6" md="3">
-            <v-card variant="outlined" class="pa-3 text-center h-100">
-              <v-icon :icon="s.icon" size="28" />
-              <div class="text-subtitle-1 font-weight-bold mt-1">{{ s.value }}</div>
-              <div class="text-caption">{{ s.label }}</div>
-            </v-card>
-          </v-col>
+          <v-col v-for="s in stats" :key="s.label" cols="6" md="3" class="stat-col">
+  <v-card variant="outlined" class="stat-card pa-3 text-center h-100">
+    <v-icon :icon="s.icon" size="28" />
+    <div class="text-subtitle-1 font-weight-bold mt-1">{{ s.value }}</div>
+    <div class="text-caption">{{ s.label }}</div>
+  </v-card>
+</v-col>
         </v-row>
 
         <!-- Hourly -->
@@ -421,6 +421,73 @@ onBeforeUnmount(() => clearInterval(timer))
 @media (max-width: 600px) {
   .hero-temp {
     font-size: 56px;
+  }
+}
+/* ---------- Stat card hover animations ---------- */
+.weather-page .v-card.stat-card {
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.25s ease, background 0.25s ease;
+}
+
+.weather-page .v-card.stat-card:hover {
+  transform: translateY(-6px);
+  background: #0b3827;
+  border-color: #35ff9a;
+  box-shadow: 0 10px 24px rgba(53, 255, 154, 0.22);
+}
+
+.weather-page .stat-card .v-icon {
+  transition: color 0.25s ease;
+}
+
+.weather-page .stat-card:hover .v-icon {
+  color: #35ff9a;
+}
+
+/* Each icon gets its own animation while the card is hovered */
+.stat-col:nth-child(1) .stat-card:hover .v-icon {
+  animation: drop-bounce 0.9s ease-in-out infinite;
+}
+
+.stat-col:nth-child(2) .stat-card:hover .v-icon {
+  animation: wind-sway 1s ease-in-out infinite;
+}
+
+.stat-col:nth-child(3) .stat-card:hover .v-icon {
+  animation: rain-wobble 0.7s ease-in-out infinite;
+}
+
+.stat-col:nth-child(4) .stat-card:hover .v-icon {
+  animation: sun-rise 1.2s ease-in-out infinite;
+}
+
+@keyframes drop-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.15); }
+}
+
+@keyframes wind-sway {
+  0%, 100% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+}
+
+@keyframes rain-wobble {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+
+@keyframes sun-rise {
+  0%, 100% { transform: translateY(3px) scale(1); }
+  50% { transform: translateY(-5px) scale(1.2); }
+}
+
+/* Respect users who turn off animations in their system settings */
+@media (prefers-reduced-motion: reduce) {
+  .weather-page .v-card.stat-card:hover,
+  .stat-col .stat-card:hover .v-icon {
+    animation: none;
+    transform: none;
   }
 }
 </style>
